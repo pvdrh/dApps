@@ -1,0 +1,39 @@
+version: "3.7"
+
+services:
+    app:
+        build:
+            context: ./docker
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        volumes:
+            - ./:/app
+            - ./docker/local.ini:/usr/local/etc/php/conf.d/local.ini
+        ports:
+            - "80:8000"
+            - "5173:5173"
+        networks:
+            - syk-network
+
+#    db:
+#        # platform: linux/x86_64
+#        image: mysql:8.0
+#        restart: unless-stopped
+#        ports:
+#            - "3306:3308"
+#        environment:
+#            MYSQL_ROOT_PASSWORD: root
+#            MYSQL_DATABASE: syk_eco_db
+#        volumes:
+#            - dbdata:/var/lib/mysql/
+#            - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+#        networks:
+#            - syk-network
+
+networks:
+    syk-network:
+        driver: bridge
+
+volumes:
+    dbdata:
+        driver: local
